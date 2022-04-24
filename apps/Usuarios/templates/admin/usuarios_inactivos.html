@@ -1,0 +1,46 @@
+{% extends "admin/master_admin.html" %}
+{% block title %} Usuarios Inactivos {% endblock %}
+{% block contenido %}
+    <div class="card">
+        <div class="card-header">
+
+        </div>
+        <div class="card-body">
+            <h4 class="card-title">Usuarios Inactivos</h4>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Correo</th>
+                        <th>Acciones</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in lista_usuarios  %}
+                        <tr>
+                            {% if usuario.is_active ==  False %}
+                                {% if usuario.is_superuser == False %}
+                                   <td>{{ usuario.id }}</td>
+                                    <td>{{ usuario.first_name }}</td>
+                                    <td>{{ usuario.last_name }}</td>
+                                    <td>{{ usuario.email }}</td>
+                                    <td>
+                                        <a name="" id="" class="btn btn-warning" href="{% url 'usersAuth:aceptar' usuario.id %}" onclick="return confirm('¿Está seguro de habilitar éste usuario?')"; role="button">Habilitar</a>
+                                    </td>
+                                {% endif %}
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="card-footer text-muted">
+
+        </div>
+    </div>
+{% endblock %}

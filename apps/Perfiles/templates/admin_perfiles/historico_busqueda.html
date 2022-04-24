@@ -1,0 +1,41 @@
+{% extends "admin/master_admin.html" %}
+{% block title %} PERFILES OCUPACIONES {% endblock %}
+{% block contenido %}
+
+     <div class="card">
+        <div class="card-body">
+            {% if cont == 1 %}
+                <h2 class="card-title">NO SE ENCONTRARON PERFILES SIMILARES A LA BUSQUEDA</h2>
+            {% endif %}
+            {% if cont == 0%}
+                <h4 class="card-title">Perfiles Ocupacionales</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Universidad</th>
+                            <th>Programa</th>
+                            <th>Perfil</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for perfiles in lista_perfiles  %}
+                        <tr>
+                               <td>{{ perfiles.universidad }}</td>
+                                <td>{{ perfiles.programa }}</td>
+                                <td>{{ perfiles.perfil }}</td>
+                                <td>
+                                    <a name="" id="" class="btn btn-warning" href="{% url 'usersAuth:index_editar_perfil' perfiles.id %}"  role="button">Editar</a>
+                                    <hr>
+                                    <a name="" id="" class="btn btn-warning" href="{% url 'usersAuth:inhabilitar_perfil' perfiles.id %}" onclick="return confirm('¿Está seguro de inhabilitar éste perfil?')"; role="button">Inhabilitar</a>
+                                </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            <a name="" id="" class="btn btn-primary" href="{% url 'usersAuth:index_perfiles_historico' %}" role="button">Regresar</a>
+        </div>
+    </div>
+{% endblock %}

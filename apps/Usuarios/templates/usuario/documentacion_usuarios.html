@@ -1,0 +1,32 @@
+{% extends "usuario/master_usuario.html" %}
+{% block title %} Documentos{% endblock %}
+{% block contenido %}
+     <div class="card">
+        <div class="card-body">
+            {% if cont == 1 %}
+                <h1 class="card-title">POR EL MOMENTO NO HAY REGISTRADO NINGÚN DOCUMENTO</h1>
+            {% endif %}
+            {% if cont == 0%}
+                <h4 class="card-title">Documentos</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for archivos in listar_documento  %}
+                        <tr>
+                               <td>{{ archivos.nombre }}</td>
+                                <td>
+                                    <a name="" id="" class="btn btn-warning" href="{{ archivos.ruta.url }}" target="_blank" onclick="return confirm('¿Desea ver éste documento?')"; role="button">Ver documento</a>
+                                </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "pages/master_principal.html" %}
+{% block title %} Procesamiento de Lenguaje Natural {% endblock %}
+{% block subtitle %} Procesamiento de Lenguaje Natural {% endblock %}
+{% block contenido %}
+<h1>Logout with success</h1>
+{% for message in messages %}
+    <p class="item" id="messages">{{ message }}</p>
+{% endfor%}
+{% endblock %}

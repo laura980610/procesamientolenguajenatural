@@ -1,0 +1,20 @@
+{% extends "pages/master_principal.html" %}
+{% block title %} REGISTRO DE USUARIO{% endblock %}
+{% block subtitle %} REGISTRO DE USUARIO {% endblock %}
+{% block contenido %}
+    <div class="card-body">
+        <h3>Recuerda que éste solo es un formulario de preregistro</h3>
+        <h3>el cual se dará respuesta al correo electrónico que ingreses</h3>
+        <form action="{% url 'usersAuth:register' %}" method="post" style="margin: auto; width: 550px;">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" class="btn btn-success" id="Register" value="Registrar"></input>
+            {% for message in messages %}
+                <p class="item" id="messages">{{ message }}</p>
+            {% endfor%}
+        </form>
+    </div>
+{% endblock %}
+
+
+

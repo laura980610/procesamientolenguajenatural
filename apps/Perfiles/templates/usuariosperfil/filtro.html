@@ -1,0 +1,34 @@
+{% extends "usuario/master_usuario.html" %}
+{% block title %} PERFILES OCUPACIONALES {% endblock %}
+{% block contenido %}
+
+     <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Perfiles Ocupacionales</h4>
+        <div class="card-footer text-muted">
+            <a name="" id="" class="btn btn-primary" style="float: right;" href="{% url 'usersAuth:index_perfiles_usuarios' %}" role="button">Regresar</a>
+        </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Universidad</th>
+                        <th>Programa</th>
+                        <th>Perfil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for perfiles in perfil_array  %}
+                        <tr>
+                           {% if perfiles.estado_id_id == 1 %}
+                               <td>{{ perfiles.universidad }}</td>
+                                <td>{{ perfiles.programa }}</td>
+                                <td>{{ perfiles.perfil }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

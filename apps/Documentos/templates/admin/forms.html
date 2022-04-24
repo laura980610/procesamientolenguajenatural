@@ -1,0 +1,20 @@
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+
+     <div class="mb-3">
+            <label for="" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" name="nombre"
+            aria-describedby="helpId" required placeholder="nombre"/>
+     </div>
+    <div class="mb-3">
+            <label for="" class="form-label">Ruta:</label>
+            <input type="file" class="form-control" name="ruta"
+            aria-describedby="helpId" placeholder="Ruta"/>
+     </div>
+    <div class="mb-3">
+            <input type="hidden" class="form-control" name="tipo_id"
+            aria-describedby="helpId" value="1"/>
+     </div>
+    <input name="" id="" class="btn btn-success" type="submit" value="Subir documento">
+    <a name="" id="" class="btn btn-primary" href="{% url 'usersAuth:index_documentos' %}" role="button">Regresar</a>
+</form>

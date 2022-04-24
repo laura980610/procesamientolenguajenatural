@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        h1{
+            font-size: 26px;
+            color: #0e525e;
+        }
+    </style>
+</head>
+<body>
+    {% if estado_id == 1 %}
+        <h1>Hola {{ nombre }}</h1>
+        <h12>Hemos actualizado tu estado en nuestra página, en éste momento te encuentras en estado
+             activo.
+             Podrás ingresar a nuestra página y acceder a sus funciones cuando lo desees.
+             Gracias por ser parte activa de nuestra plataforma</h12>
+    {% endif %}
+    {% if estado_id == 0 %}
+        <h1>Hola {{ nombre }}</h1>
+        <h12>Hemos actualizado tu estado en nuestra página, lo sentimos en éste momento te encuentras en estado
+             inactivo.</h12>
+    {% endif %}
+</body>
+</html>

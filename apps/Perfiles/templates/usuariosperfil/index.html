@@ -1,0 +1,42 @@
+{% extends "usuario/master_usuario.html" %}
+{% block title %} PERFILES OCUPACIONALES {% endblock %}
+{% block contenido %}
+
+     <div class="card">
+        <div class="card-header">
+            {% include 'usuariosperfil/forms.html' %}
+            {% for message in messages %}
+                <p class="item" id="messages">{{ message }}</p>
+            {% endfor%}
+        </div>
+        <div class="card-body">
+            {% if cont == 1 %}
+                <h1 class="card-title">POR EL MOMENTO NO HAY REGISTRADO NINGÚN PERFIL</h1>
+            {% endif %}
+            {% if cont == 0%}
+                <h4 class="card-title">Perfiles Ocupacionales</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Universidad</th>
+                            <th>Programa</th>
+                            <th>Perfil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for perfiles in lista_perfiles  %}
+                            {% if perfiles.estado_id_id == 1 %}
+                                <tr>
+                                       <td>{{ perfiles.universidad }}</td>
+                                        <td>{{ perfiles.programa }}</td>
+                                        <td>{{ perfiles.perfil }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif%}
+        </div>
+    </div>
+
+{% endblock %}

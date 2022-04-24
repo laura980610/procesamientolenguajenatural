@@ -1,0 +1,52 @@
+{% extends "pages/master_principal.html" %}
+{% block title %} INICIO DE SESIÓN {% endblock %}
+{% block contenido %}
+
+{% if form.errors %}
+    <p>Su nombre de usuario y contraseña no coinciden. Inténtelo de nuevo.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Su cuenta no tiene acceso a esta página. Para proceder,
+    por favor inicie sesión con una cuenta que tenga acceso.</p>
+    {% else %}
+    <p>Por favor inicie sesión para ver esta página.</p>
+    {% endif %}
+{% endif %}
+<div>
+    <center>
+        <h2 class="mx-auto my-0 text-uppercase justify-content-xl-center">Procesamiento de Lenguaje Natural</h2>
+        <h3 class="mx-auto my-0 text-uppercase justify-content-xl-center">Inicio de sesión</h3>
+        <hr>
+    </center>
+</div>
+
+<form method="post" action="{% url 'login' %}"  style="margin: auto; width: 220px;">
+{% csrf_token %}
+
+<div>
+    <td class="text-center">{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+     <hr>
+</div>
+<div>
+
+      <td>{{ form.password.label_tag }}</td>
+      <td>{{ form.password }}</td>
+      <hr>
+</div>
+
+<div>
+    <center>
+        <input type="submit" class="btn btn-success" value="Ingresar"/>
+        <input type="hidden" name="next" value="{{ next }}" />
+    </center>
+</div>
+</form>
+<center>
+{# Assumes you setup the password_reset view in your URLconf #}
+    <p style="margin: auto; width: 220px;"><a href="{% url 'password_reset' %}" >¿Olvidé mi contraseña?</a></p>
+</center>
+
+{% endblock %}

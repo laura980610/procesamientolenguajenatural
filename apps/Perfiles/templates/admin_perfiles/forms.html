@@ -1,0 +1,6 @@
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+        {{ formulario_perfil.as_p }}
+    <input name="" id="" class="btn btn-success" type="submit" value="Registrar perfil">
+    <a name="" id="" class="btn btn-primary" href="{% url 'usersAuth:index_perfiles' %}" role="button">Regresar</a>
+</form>

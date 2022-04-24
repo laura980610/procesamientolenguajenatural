@@ -1,0 +1,44 @@
+{% extends "admin/master_admin.html" %}
+{% block title %} Documentos{% endblock %}
+{% block contenido %}
+     <div class="card">
+        <div class="card-header">
+            <p class="lead">
+                <a class="btn btn-success btn-lg" href="{% url 'usersAuth:subir_documentos' %}" role="button">Subir documento</a>
+            </p>
+        </div>
+        <div class="card-body">
+            {% if cont == 1 %}
+                <h1 class="card-title">POR EL MOMENTO NO HAY REGISTRADO NINGÚN DOCUMENTO</h1>
+            {% endif %}
+            {% if cont == 0%}
+                <h4 class="card-title">Documentos</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for archivos in lista_documentos  %}
+                        <tr>
+                               <td>{{ archivos.nombre }}</td>
+                                <td>
+                                    <a name="" id="" class="btn btn-warning" href="{{ archivos.ruta.url }}" target="_blank" onclick="return confirm('¿Desea ver éste documento?')"; role="button">Ver documento</a>
+                                    <a name="" id="" class="btn btn-warning" href="{% url 'usersAuth:eliminar_archivo' archivos.id %}" onclick="return confirm('¿Está seguro de eliminar por completo éste documento?')"; role="button">Eliminar documento</a>
+
+                                </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+        <div class="card-footer text-muted">
+
+        </div>
+    </div>
+
+{% endblock %}
