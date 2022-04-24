@@ -116,9 +116,7 @@ def eliminar_puntuacion(string_inicial):
 
 def procesar_texto(textnlp):
     text_content = textnlp
-    # All to lower case
     text_content = text_content.lower()
-    # Remove punctuation and spanish stopwords
     text_content = eliminar_puntuacion(text_content)
     text_content = eliminacion_stopwords(text_content)
     return text_content
@@ -135,13 +133,11 @@ def perfiles_usuario(request):
             querysetbusqueda = request.GET.get("busqueda")
             text = str(querysetbusqueda)
             nlp_text = procesar_texto(text)
-
             if querysetfiltro == '1':
                 vector_perfiles = []
                 for textprocesamiento in lista_perfiles:
                     institucion = str(textprocesamiento.universidad)
                     nlp_registro = procesar_texto(institucion)
-                    # TF-IDF
                     vectorizer = TfidfVectorizer()
                     X = vectorizer.fit_transform([nlp_text, nlp_registro])
                     similarity_matrix = cosine_similarity(X, X)
@@ -162,13 +158,11 @@ def perfiles_usuario(request):
                 for textprocesamiento in lista_perfiles:
                     programa = str(textprocesamiento.programa)
                     nlp_registro = procesar_texto(programa)
-                    # TF-IDF
                     vectorizer = TfidfVectorizer()
                     X = vectorizer.fit_transform([nlp_text, nlp_registro])
                     similarity_matrix = cosine_similarity(X, X)
                     if(similarity_matrix[0][1] >= 0.2):
                         vector_perfiles = vector_perfiles + [textprocesamiento.id]
-                    #print(similarity_matrix[0][1], similarity_matrix[1][1])
                 if vector_perfiles:
                     idfiltro = vector_perfiles[0]
                     vector_perfiles.pop(0)
@@ -185,7 +179,6 @@ def perfiles_usuario(request):
                 for textprocesamiento in lista_perfiles:
                     perfil = str(textprocesamiento.perfil)
                     nlp_registro = procesar_texto(perfil)
-                    # TF-IDF
                     vectorizer = TfidfVectorizer()
                     X = vectorizer.fit_transform([nlp_text, nlp_registro])
                     similarity_matrix = cosine_similarity(X, X)
@@ -194,7 +187,6 @@ def perfiles_usuario(request):
                 p = historico(busqueda=text, perfiles=vector_perfiles)
                 p.save()
                 if vector_perfiles:
-
                     idfiltro = vector_perfiles[0]
                     vector_perfiles.pop(0)
                     perfil_array = perfiles_ocupacionales.objects.filter(id=idfiltro)
