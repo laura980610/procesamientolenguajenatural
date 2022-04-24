@@ -123,6 +123,7 @@ def procesar_texto(textnlp):
     text_content = eliminacion_stopwords(text_content)
     return text_content
 
+
 def perfiles_usuario(request):
     if request.user.is_authenticated:
         if request.user.is_superuser == False:

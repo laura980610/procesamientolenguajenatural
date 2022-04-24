@@ -17,29 +17,20 @@ def register(request):
     else:
         if request.method == 'POST':
             form = RegisterUserForm(request.POST)
-            # RegisterUserForm is created from User model, all model field restrictions are checked to considerate it a valid form
             if form.is_valid():
-                # Save user to database but with is_active = False
                 user = form.save(commit=False)
                 user.is_active = False
                 user.save()
-
                 return render(request, 'pages/index.html')
             else:
-                #print('Invalid form: %s' % form.errors.as_data())
-                #print(type(form.errors.as_data()))
                 if form.errors:
-                    #messages.info(request, 'Input field errors:')
                     for key, values in form.errors.as_data().items():
-                        #print("Bad value: %s - %s" % (key, values))
                         if key == 'email':
                             messages.info(request, 'Correo registrado')
                             break
                         else:
                             for error_value in values:
-                                #print(type(error_value))
                                 messages.info(request, '%s' % (error_value.message))
-
                 return HttpResponseRedirect(reverse('usersAuth:register'))
         else:
             form = RegisterUserForm()
