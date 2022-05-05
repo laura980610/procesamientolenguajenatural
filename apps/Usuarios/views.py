@@ -21,6 +21,7 @@ def register(request):
                 user = form.save(commit=False)
                 user.is_active = False
                 user.save()
+                messages.add_message(request=request, level=messages.SUCCESS, message="Su registro se ha realizado con éxito")
                 return render(request, 'pages/index.html')
             else:
                 if form.errors:
@@ -119,6 +120,7 @@ def aceptar_preregistro(request, id):
             nombre = preregistro.first_name
             estado_id = preregistro.is_active
             send_email(nombre, mail, estado_id)
+            messages.add_message(request=request, level=messages.SUCCESS, message="Se ha enviado el correo de notificación")
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
         return render(request, 'pages/index.html')
@@ -134,6 +136,7 @@ def rechazar_preregistro(request, id):
             nombre = preregistro.first_name
             estado_id = preregistro.is_active
             send_email(nombre, mail, estado_id)
+            messages.add_message(request=request, level=messages.SUCCESS, message="Se ha enviado el correo de notificación")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
         return render(request, 'pages/index.html')

@@ -5,7 +5,7 @@
      <div class="card">
         <div class="card-body">
             {% if cont == 1 %}
-                <h2 class="card-title">NO SE ENCONTRARON PERFILES SIMILARES A LA BUSQUEDA</h2>
+                <h2 class="card-title">NO SE ENCONTRARON PERFILES SIMILARES A LA BÚSQUEDA</h2>
             {% endif %}
             {% if cont == 0%}
                 <h4 class="card-title">Perfiles Ocupacionales</h4>
@@ -15,7 +15,6 @@
                             <th>Universidad</th>
                             <th>Programa</th>
                             <th>Perfil</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,11 +24,6 @@
                                <td>{{ perfiles.universidad }}</td>
                                 <td>{{ perfiles.programa }}</td>
                                 <td>{{ perfiles.perfil }}</td>
-                                <td>
-                                    <a name="" id="" class="btn btn-warning" href="{% url 'usersAuth:index_editar_perfil' perfiles.id %}"  role="button">Editar</a>
-                                    <hr>
-                                    <a name="" id="" class="btn btn-warning" href="{% url 'usersAuth:inhabilitar_perfil' perfiles.id %}" onclick="return confirm('¿Está seguro de inhabilitar éste perfil?')"; role="button">Inhabilitar</a>
-                                </td>
                         </tr>
                         {% endfor %}
                     </tbody>
