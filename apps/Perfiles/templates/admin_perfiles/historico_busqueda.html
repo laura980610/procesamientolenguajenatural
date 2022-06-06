@@ -3,7 +3,11 @@
 {% block contenido %}
 
      <div class="card">
-        <div class="card-body">
+        <div class="card-footer text-muted" id="button">
+            <a name="" id="" onclick="miFunc()" class="btn btn-primary" style="float: right;" role="button">Descargar PDF</a>
+        </div>
+        <div class="card-body" id="perfiles_table">
+
             {% if cont == 1 %}
                 <h2 class="card-title">NO SE ENCONTRARON PERFILES SIMILARES A LA BÚSQUEDA</h2>
             {% endif %}
@@ -29,7 +33,30 @@
                     </tbody>
                 </table>
             {% endif %}
+        </div>
+        <div class="card-footer text-muted" id="button">
             <a name="" id="" class="btn btn-primary" href="{% url 'usersAuth:index_perfiles_historico' %}" role="button">Regresar</a>
         </div>
     </div>
+{% endblock %}
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="html2pdf.bundle.min.js"></script>
+    <script>
+      function miFunc() {
+          var element = document.getElementById('perfiles_table');
+          var opt = {
+              margin:       0.4,
+              filename:     'resultados.pdf',
+              image:        { type: 'jpeg', quality: 0.90 },
+              html2canvas:  { scale: 2 },
+              jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // New Promise-based usage:
+            html2pdf().set(opt).from(element).save();
+
+
+      }
+    </script>
 {% endblock %}

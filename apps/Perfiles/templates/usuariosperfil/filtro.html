@@ -2,33 +2,60 @@
 {% block title %} PERFILES OCUPACIONALES {% endblock %}
 {% block contenido %}
 
-     <div class="card">
-        <div class="card-body">
+     <div class="card" >
             <h4 class="card-title">Perfiles Ocupacionales</h4>
-        <div class="card-footer text-muted">
-            <a name="" id="" class="btn btn-primary" style="float: right;" href="{% url 'usersAuth:index_perfiles_usuarios' %}" role="button">Regresar</a>
-        </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Universidad</th>
-                        <th>Programa</th>
-                        <th>Perfil</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for perfiles in perfil_array  %}
+            <div class="card-footer text-muted" id="button">
+                <a name="" id="" onclick="miFunc()" class="btn btn-primary" style="float: right;" role="button">Descargar PDF</a>
+            </div>
+            <div class="card-footer text-muted" id="button">
+                <a name="" id="" class="btn btn-primary" style="float: right;" href="{% url 'usersAuth:index_perfiles_usuarios' %}" role="button">Regresar</a>
+            </div>
+            <div class="card-footer text-muted" >
+                <h3>El porcentaje mayor de coincidencia fue de: {{ porcentajemayor }}</h3>
+            </div>
+        <div class="card-body" id="perfiles_table">
+                <table class="table" id="table_perfiles">
+                    <thead>
                         <tr>
-                           {% if perfiles.estado_id_id == 1 %}
-                               <td>{{ perfiles.universidad }}</td>
-                                <td>{{ perfiles.programa }}</td>
-                                <td>{{ perfiles.perfil }}</td>
-                            {% endif %}
+                            <th>Universidad</th>
+                            <th>Programa</th>
+                            <th>Perfil</th>
+                            <th>Porcentaje</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for perfiles in perfil_array  %}
+                            <tr>
+                               {% if perfiles.estado_id_id == 1 %}
+                                   <td>{{ perfiles.universidad }}</td>
+                                    <td>{{ perfiles.programa }}</td>
+                                    <td>{{ perfiles.perfil }}</td>
+
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
         </div>
+
     </div>
 
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="html2pdf.bundle.min.js"></script>
+    <script>
+      function miFunc() {
+          var element = document.getElementById('perfiles_table');
+          var opt = {
+              margin:       0.3,
+              filename:     'coincidencias.pdf',
+              image:        { type: 'jpeg', quality: 0.90 },
+              html2canvas:  { scale: 2 },
+              jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+      }
+    </script>
 {% endblock %}

@@ -154,6 +154,11 @@ def perfiles_usuario(request):
             querysetbusqueda = request.GET.get("busqueda")
             text = str(querysetbusqueda)
             nlp_text = procesar_texto(text)
+            mayor = 0
+            menor = 0
+            porcentajemayor = ""
+            porcentajemenor = ""
+            pruebas =  ["10","2","5"]
             if querysetfiltro == '1':
                 vector_perfiles = []
                 for textprocesamiento in lista_perfiles:
@@ -162,18 +167,36 @@ def perfiles_usuario(request):
                     vectorizer = TfidfVectorizer()
                     X = vectorizer.fit_transform([nlp_text, nlp_registro])
                     similarity_matrix = cosine_similarity(X, X)
-                    print('institución', similarity_matrix)
+
+                    #print('institución', similarity_matrix)
                     if(similarity_matrix[0][1] >= 0.5):
+                        if(similarity_matrix[0][1] > mayor):
+                            mayor = similarity_matrix[0][1]
+                            #porcentaje = similarity_matrix[0][1]
+                            #porcentajes = "{:%}".format(porcentaje)
+                        if (similarity_matrix[0][1] < menor):
+                            menor = similarity_matrix[0][1]
+                            # porcentaje = similarity_matrix[0][1]
+                            # porcentajes = "{:%}".format(porcentaje)
+
                         vector_perfiles = vector_perfiles + [textprocesamiento.id]
+                porcentajemenor = "{:%}".format(menor)
+                porcentajemayor = "{:%}".format(mayor)
                 if vector_perfiles:
                     idfiltro = vector_perfiles[0]
+                    aux = []
+                    contaux = -1
                     vector_perfiles.pop(0)
+                    variable = '0'
                     perfil_array = perfiles_ocupacionales.objects.filter(id=idfiltro)
                     for idperfil in vector_perfiles:
+                        contaux=+1
+
                         perfil_array = perfil_array | perfiles_ocupacionales.objects.filter(id=idperfil)
-                    return render(request, 'usuariosperfil/filtro.html', {'perfil_array': perfil_array})
+
+                    return render(request, 'usuariosperfil/filtro.html', {'perfil_array': perfil_array, 'porcentajemayor': porcentajemayor, 'porcentajemenor': porcentajemenor})
                 else:
-                    messages.error(request,'LO SENTIMOS, NO ENCONTRAMOS COINCIDENCIAS')
+                    cont = 2
                     return render(request, 'usuariosperfil/index.html',{'lista_perfiles': lista_perfiles, 'cont': cont})
             elif querysetfiltro == '2':
                 vector_perfiles = []
@@ -187,7 +210,16 @@ def perfiles_usuario(request):
                     print('programa',similarity_matrix)
                     if(similarity_matrix[0][1] >= 0.2):
                         vector_perfiles = vector_perfiles + [textprocesamiento.id]
-
+                        if (similarity_matrix[0][1] > mayor):
+                            mayor = similarity_matrix[0][1]
+                            # porcentaje = similarity_matrix[0][1]
+                            # porcentajes = "{:%}".format(porcentaje)
+                        if (similarity_matrix[0][1] < menor):
+                            menor = similarity_matrix[0][1]
+                            # porcentaje = similarity_matrix[0][1]
+                            # porcentajes = "{:%}".format(porcentaje)
+                porcentajemenor = "{:%}".format(menor)
+                porcentajemayor = "{:%}".format(mayor)
                 if vector_perfiles:
                     idfiltro = vector_perfiles[0]
                     vector_perfiles.pop(0)
@@ -195,9 +227,11 @@ def perfiles_usuario(request):
                     lista_perfiles = perfiles_ocupacionales.objects.all()
                     for idperfil in vector_perfiles:
                         perfil_array = perfil_array | perfiles_ocupacionales.objects.filter(id=idperfil)
+                    return render(request, 'usuariosperfil/filtro.html',{'perfil_array': perfil_array, 'porcentajemayor': porcentajemayor,'porcentajemenor': porcentajemenor})
+
                     return render(request, 'usuariosperfil/filtro.html', {'perfil_array': perfil_array})
                 else:
-                    messages.error(request, 'LO SENTIMOS, NO ENCONTRAMOS COINCIDENCIAS')
+                    cont = 2
                     return render(request, 'usuariosperfil/index.html', {'lista_perfiles': lista_perfiles, 'cont': cont})
             elif querysetfiltro == '3':
                 vector_perfiles = []
@@ -207,11 +241,21 @@ def perfiles_usuario(request):
                     vectorizer = TfidfVectorizer()
                     X = vectorizer.fit_transform([nlp_text, nlp_registro])
                     similarity_matrix = cosine_similarity(X, X)
-                    print('perfil', similarity_matrix)
+                    print('perfil', similarity_matrix, textprocesamiento.id)
                     if(similarity_matrix[0][1] >= 0.2):
                         vector_perfiles = vector_perfiles + [textprocesamiento.id]
+                        if (similarity_matrix[0][1] > mayor):
+                            mayor = similarity_matrix[0][1]
+                            # porcentaje = similarity_matrix[0][1]
+                            # porcentajes = "{:%}".format(porcentaje)
+                        if (similarity_matrix[0][1] < menor):
+                            menor = similarity_matrix[0][1]
+                            # porcentaje = similarity_matrix[0][1]
+                            # porcentajes = "{:%}".format(porcentaje)
                 p = historico(busqueda=text, perfiles=vector_perfiles)
                 p.save()
+                porcentajemenor = "{:%}".format(menor)
+                porcentajemayor = "{:%}".format(mayor)
                 if vector_perfiles:
                     idfiltro = vector_perfiles[0]
                     vector_perfiles.pop(0)
@@ -219,9 +263,11 @@ def perfiles_usuario(request):
                     lista_perfiles = perfiles_ocupacionales.objects.all()
                     for idperfil in vector_perfiles:
                         perfil_array = perfil_array | perfiles_ocupacionales.objects.filter(id=idperfil)
-                    return render(request, 'usuariosperfil/filtro.html', {'perfil_array': perfil_array})
+                    return render(request, 'usuariosperfil/filtro.html', {'perfil_array': perfil_array, 'porcentajemayor': porcentajemayor, 'porcentajemenor': porcentajemenor})
                 else:
-                    messages.error(request, 'LO SENTIMOS, NO ENCONTRAMOS COINCIDENCIAS')
+                    cont = 2
+                    #return render(request,'usuariosperfil/index.html', {'lista_perfiles': lista_perfiles, 'cont': cont}, message='Save complete')
+                    #messages.error(request, 'LO SENTIMOS, NO ENCONTRAMOS COINCIDENCIAS')
                     return render(request, 'usuariosperfil/index.html', {'lista_perfiles': lista_perfiles, 'cont': cont})
             else:
                 lista_perfiles = perfiles_ocupacionales.objects.all()
