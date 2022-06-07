@@ -38,15 +38,34 @@ def reportehistorico(request):
 def perfiles_resultado(request, id):
     if request.user.is_authenticated:
         if request.user.is_superuser == True:
-            characters = "[], "
+            characters = "[] "
             resultado = historico.objects.get(id=id)
             arrayperfiles = resultado.perfiles
             cont = 1
+            array2 = []
             lista_perfiles = perfiles_ocupacionales.objects.all()
             for x in range(len(characters)):
                 arrayperfiles = arrayperfiles.replace(characters[x], "")
             if arrayperfiles != "":
                 cont=0
+                conta=0
+                subcadena = ""
+                prueba = ""
+                if ',' in arrayperfiles:
+                    for cadena in arrayperfiles:
+                        conta +=1
+                        if cadena != ",":
+                            subcadena = subcadena + cadena
+                            if conta == len(arrayperfiles):
+                                array2 = array2 + [subcadena]
+                        else:
+                            array2 = array2 + [subcadena]
+                            subcadena = ""
+                    if conta == len(arrayperfiles):
+                        arrayperfiles = array2
+                else:
+                    arrayperfiles = [arrayperfiles]
+
                 arrayperfiles = list(arrayperfiles)
                 idfiltro = str(arrayperfiles[0])
                 idfiltro = int(idfiltro)
@@ -56,6 +75,7 @@ def perfiles_resultado(request, id):
                     idperfil2 = str(idperfil)
                     idbusqueda = int(idperfil2)
                     lista_perfiles = lista_perfiles | perfiles_ocupacionales.objects.filter(id=idbusqueda)
+
             return render(request, 'admin_perfiles/historico_busqueda.html', {'lista_perfiles': lista_perfiles, 'cont': cont})
         else:
             return render(request, 'usuario/index.html')
@@ -81,6 +101,7 @@ def crear_perfil(request):
             formulario_perfil = PerfilesForm(request.POST or None, request.FILES or None)
             if formulario_perfil.is_valid():
                 formulario_perfil.save()
+                messages.add_message(request=request, level=messages.SUCCESS, message="Perfil ocupacional registrado con éxito")
                 return redirect('usersAuth:index_perfiles')
             return render(request, 'admin_perfiles/create.html', {'formulario_perfil': formulario_perfil})
         else:
@@ -133,6 +154,11 @@ def perfiles_usuario(request):
             querysetbusqueda = request.GET.get("busqueda")
             text = str(querysetbusqueda)
             nlp_text = procesar_texto(text)
+            mayor = 0
+            menor = 0
+            porcentajemayor = ""
+            porcentajemenor = ""
+            pruebas =  ["10","2","5"]
             if querysetfiltro == '1':
                 vector_perfiles = []
                 for textprocesamiento in lista_perfiles:
@@ -141,28 +167,59 @@ def perfiles_usuario(request):
                     vectorizer = TfidfVectorizer()
                     X = vectorizer.fit_transform([nlp_text, nlp_registro])
                     similarity_matrix = cosine_similarity(X, X)
-                    if(similarity_matrix[0][1] >= 0.7):
+
+                    #print('institución', similarity_matrix)
+                    if(similarity_matrix[0][1] >= 0.5):
+                        if(similarity_matrix[0][1] > mayor):
+                            mayor = similarity_matrix[0][1]
+                            #porcentaje = similarity_matrix[0][1]
+                            #porcentajes = "{:%}".format(porcentaje)
+                        if (similarity_matrix[0][1] < menor):
+                            menor = similarity_matrix[0][1]
+                            # porcentaje = similarity_matrix[0][1]
+                            # porcentajes = "{:%}".format(porcentaje)
+
                         vector_perfiles = vector_perfiles + [textprocesamiento.id]
+                porcentajemenor = "{:%}".format(menor)
+                porcentajemayor = "{:%}".format(mayor)
                 if vector_perfiles:
                     idfiltro = vector_perfiles[0]
+                    aux = []
+                    contaux = -1
                     vector_perfiles.pop(0)
+                    variable = '0'
                     perfil_array = perfiles_ocupacionales.objects.filter(id=idfiltro)
                     for idperfil in vector_perfiles:
+                        contaux=+1
+
                         perfil_array = perfil_array | perfiles_ocupacionales.objects.filter(id=idperfil)
-                    return render(request, 'usuariosperfil/filtro.html', {'perfil_array': perfil_array})
+
+                    return render(request, 'usuariosperfil/filtro.html', {'perfil_array': perfil_array, 'porcentajemayor': porcentajemayor, 'porcentajemenor': porcentajemenor})
                 else:
-                    messages.error(request,'LO SENTIMOS, NO ENCONTRAMOS COINCIDENCIAS')
+                    cont = 2
                     return render(request, 'usuariosperfil/index.html',{'lista_perfiles': lista_perfiles, 'cont': cont})
             elif querysetfiltro == '2':
                 vector_perfiles = []
+                vector_prueba = []
                 for textprocesamiento in lista_perfiles:
                     programa = str(textprocesamiento.programa)
                     nlp_registro = procesar_texto(programa)
                     vectorizer = TfidfVectorizer()
                     X = vectorizer.fit_transform([nlp_text, nlp_registro])
                     similarity_matrix = cosine_similarity(X, X)
+                    print('programa',similarity_matrix)
                     if(similarity_matrix[0][1] >= 0.2):
                         vector_perfiles = vector_perfiles + [textprocesamiento.id]
+                        if (similarity_matrix[0][1] > mayor):
+                            mayor = similarity_matrix[0][1]
+                            # porcentaje = similarity_matrix[0][1]
+                            # porcentajes = "{:%}".format(porcentaje)
+                        if (similarity_matrix[0][1] < menor):
+                            menor = similarity_matrix[0][1]
+                            # porcentaje = similarity_matrix[0][1]
+                            # porcentajes = "{:%}".format(porcentaje)
+                porcentajemenor = "{:%}".format(menor)
+                porcentajemayor = "{:%}".format(mayor)
                 if vector_perfiles:
                     idfiltro = vector_perfiles[0]
                     vector_perfiles.pop(0)
@@ -170,9 +227,11 @@ def perfiles_usuario(request):
                     lista_perfiles = perfiles_ocupacionales.objects.all()
                     for idperfil in vector_perfiles:
                         perfil_array = perfil_array | perfiles_ocupacionales.objects.filter(id=idperfil)
+                    return render(request, 'usuariosperfil/filtro.html',{'perfil_array': perfil_array, 'porcentajemayor': porcentajemayor,'porcentajemenor': porcentajemenor})
+
                     return render(request, 'usuariosperfil/filtro.html', {'perfil_array': perfil_array})
                 else:
-                    messages.error(request, 'LO SENTIMOS, NO ENCONTRAMOS COINCIDENCIAS')
+                    cont = 2
                     return render(request, 'usuariosperfil/index.html', {'lista_perfiles': lista_perfiles, 'cont': cont})
             elif querysetfiltro == '3':
                 vector_perfiles = []
@@ -182,10 +241,21 @@ def perfiles_usuario(request):
                     vectorizer = TfidfVectorizer()
                     X = vectorizer.fit_transform([nlp_text, nlp_registro])
                     similarity_matrix = cosine_similarity(X, X)
+                    print('perfil', similarity_matrix, textprocesamiento.id)
                     if(similarity_matrix[0][1] >= 0.2):
                         vector_perfiles = vector_perfiles + [textprocesamiento.id]
+                        if (similarity_matrix[0][1] > mayor):
+                            mayor = similarity_matrix[0][1]
+                            # porcentaje = similarity_matrix[0][1]
+                            # porcentajes = "{:%}".format(porcentaje)
+                        if (similarity_matrix[0][1] < menor):
+                            menor = similarity_matrix[0][1]
+                            # porcentaje = similarity_matrix[0][1]
+                            # porcentajes = "{:%}".format(porcentaje)
                 p = historico(busqueda=text, perfiles=vector_perfiles)
                 p.save()
+                porcentajemenor = "{:%}".format(menor)
+                porcentajemayor = "{:%}".format(mayor)
                 if vector_perfiles:
                     idfiltro = vector_perfiles[0]
                     vector_perfiles.pop(0)
@@ -193,9 +263,11 @@ def perfiles_usuario(request):
                     lista_perfiles = perfiles_ocupacionales.objects.all()
                     for idperfil in vector_perfiles:
                         perfil_array = perfil_array | perfiles_ocupacionales.objects.filter(id=idperfil)
-                    return render(request, 'usuariosperfil/filtro.html', {'perfil_array': perfil_array})
+                    return render(request, 'usuariosperfil/filtro.html', {'perfil_array': perfil_array, 'porcentajemayor': porcentajemayor, 'porcentajemenor': porcentajemenor})
                 else:
-                    messages.error(request, 'LO SENTIMOS, NO ENCONTRAMOS COINCIDENCIAS')
+                    cont = 2
+                    #return render(request,'usuariosperfil/index.html', {'lista_perfiles': lista_perfiles, 'cont': cont}, message='Save complete')
+                    #messages.error(request, 'LO SENTIMOS, NO ENCONTRAMOS COINCIDENCIAS')
                     return render(request, 'usuariosperfil/index.html', {'lista_perfiles': lista_perfiles, 'cont': cont})
             else:
                 lista_perfiles = perfiles_ocupacionales.objects.all()
@@ -215,6 +287,7 @@ def editar_perfil(request, id):
                 formulario_perfil = PerfilesForm(request.POST, instance=perfiles)
                 if formulario_perfil.is_valid():
                     formulario_perfil.save()
+                    messages.add_message(request=request, level=messages.SUCCESS, message="Perfil ocupacional actualizado con éxito")
                 return redirect('usersAuth:index_perfiles')
             return render(request, 'admin_perfiles/create.html', {'formulario_perfil': formulario_perfil})
         else:

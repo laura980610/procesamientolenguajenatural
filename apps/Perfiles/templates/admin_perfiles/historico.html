@@ -6,14 +6,14 @@
 
         <div class="card-body">
             {% if cont == 1 %}
-                <h1 class="card-title">POR EL MOMENTO NO SE HAN REALIZADO BUSQUEDA</h1>
+                <h1 class="card-title">POR EL MOMENTO NO SE HAN REALIZADO BÚSQUEDA</h1>
             {% endif %}
             {% if cont == 0%}
                 <h4 class="card-title">Histórico</h4>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Busqueda</th>
+                            <th>BÚsqueda</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -24,8 +24,6 @@
                                <td>{{ perfiles.busqueda }}</td>
                                 <td>
                                     <a name="" id="" class="btn btn-warning" href="{% url 'usersAuth:index_historico_resultado' perfiles.id %}"  role="button">VER RESULTADOS</a>
-                                    <hr>
-                                    <a name="" id="" class="btn btn-warning" href="{% url 'usersAuth:index_pdf' %}"  role="button">PDF</a>
                                     <hr>
                                 </td>
                         </tr>

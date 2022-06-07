@@ -2,6 +2,16 @@
 {% block title %} Procesamiento de Lenguaje Natural {% endblock %}
 {% block subtitle %} Procesamiento de Lenguaje Natural {% endblock %}
 {% block contenido %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <h1 class="mx-auto my-0 text-uppercase justify-content-xl-center">Procesamiento de Lenguaje Natural</h1>
     <pre>
         <h3 class="mx-auto my-0 text-uppercase align-content-center">Universidad de Cundinamarca - Extensión Facatativá</h3>

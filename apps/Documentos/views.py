@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import DocumentoForm
 from .models import archivos
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 def crear_documento(request):
     if request.user.is_authenticated:
@@ -9,6 +10,7 @@ def crear_documento(request):
             formulario_documento = DocumentoForm(request.POST or None, request.FILES or None)
             if formulario_documento.is_valid():
                 formulario_documento.save()
+                messages.add_message(request=request, level=messages.SUCCESS, message="Documento registrado con éxito")
                 return redirect('usersAuth:index_documentos')
             return render(request, 'admin/subir_documento.html', {'formulario_documento': formulario_documento})
         else:
@@ -48,6 +50,7 @@ def crear_informe(request):
             formulario_informe = DocumentoForm(request.POST or None, request.FILES or None)
             if formulario_informe.is_valid():
                 formulario_informe.save()
+                messages.add_message(request=request, level=messages.SUCCESS, message="Informe registrado con éxito")
                 return redirect('usersAuth:index_informes')
             return render(request, 'admin/subir_informe.html', {'formulario_informe': formulario_informe})
         else:

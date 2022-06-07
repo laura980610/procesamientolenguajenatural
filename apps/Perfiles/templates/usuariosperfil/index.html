@@ -13,6 +13,12 @@
             {% if cont == 1 %}
                 <h1 class="card-title">POR EL MOMENTO NO HAY REGISTRADO NINGÚN PERFIL</h1>
             {% endif %}
+            {% if cont == 2 %}
+                <div class="card-footer text-muted" id="button">
+                    <a name="" id="" class="btn btn-primary" style="float: right;" href="{% url 'usersAuth:index_perfiles_usuarios' %}" role="button">Regresar</a>
+                </div>
+                <h1 class="card-title">LO SENTIMOS NO SE ENCONTRARON COINCIDENCIAS</h1>
+            {% endif %}
             {% if cont == 0%}
                 <h4 class="card-title">Perfiles Ocupacionales</h4>
                 <table class="table">
@@ -40,3 +46,4 @@
     </div>
 
 {% endblock %}
+
