@@ -56,7 +56,7 @@ DATABASES = {
         'NAME': 'perfiles',
         'USER': 'postgres',
         'PASSWORD': '980610Laura',
-        'HOST': 'database-1.cqdlpu4ylbbc.us-east-1.rds.amazonaws.com',
+        'HOST': 'database-2.cqdlpu4ylbbc.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
 
     }
