@@ -53,10 +53,10 @@ WSGI_APPLICATION = 'procesamientolenguajenatural.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'perfiles',
-        'USER': 'camila',
+        'NAME': 'myappdb',
+        'USER': 'laura',
         'PASSWORD': 'admin',
-        'HOST': '54.165.98.14',
+        'HOST': '23.22.194.143',
         'PORT': '5432',
 
     }
