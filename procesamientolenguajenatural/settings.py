@@ -53,7 +53,7 @@ WSGI_APPLICATION = 'procesamientolenguajenatural.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'database-1',
+        'NAME': 'perfiles',
         'USER': 'postgres',
         'PASSWORD': '980610Laura',
         'HOST': 'database-1.cqdlpu4ylbbc.us-east-1.rds.amazonaws.com',
